@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mihama Marathon AR Demo</title>
+
+    <!-- A-Frame本体 -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+
+    <!-- AR.js（A-Frame版＋NFT対応ビルド） -->
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.3/aframe/build/aframe-ar-nft.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!--
+      vr-mode-ui="enabled: false"  VRボタンを消す
+      embedded                     ページ全体に埋め込む
+      arjs="..."                   AR.jsの設定
+    -->
+    <a-scene
+      vr-mode-ui="enabled: false"
+      embedded
+      renderer="logarithmicDepthBuffer: true;"
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+    >
+      <!--
+        a-nft:
+          type="nft"             → NFTマーカーを使う
+          url="./markers/mihama" → mihama.fset / mihama.fset3 / mihama.iset の共通パス
+          smooth="true"          → 動きをなめらかに
+      -->
+      <a-nft
+        type="nft"
+        url="./markers/mihama"
+        smooth="true"
+        smoothCount="10"
+        smoothTolerance="0.01"
+        smoothThreshold="5"
+      >
+        <!-- ポスターの上に表示する3Dオブジェクト（まずは箱だけ） -->
+        <a-box
+          position="0 0 0"
+          depth="0.2"
+          height="0.2"
+          width="0.2"
+          color="#FFCC00"
+        >
+        </a-box>
+
+        <!-- 文字を出したい場合の例 -->
+        <a-text
+          value="Mihama Marathon AR"
+          position="0 0.3 0"
+          align="center"
+          color="#FFFFFF"
+          width="1.5"
+        >
+        </a-text>
+      </a-nft>
+
+      <!-- カメラ（AR.jsが制御する） -->
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>

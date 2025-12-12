@@ -2,12 +2,9 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <title>Mihama Marathon AR (NFT)</title>
+    <title>Mihama Marathon AR (NFT DIAG)</title>
 
-    <!-- A-Frame本体 -->
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-
-    <!-- AR.js（NFT対応ビルド） -->
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.3/aframe/build/aframe-ar-nft.js"></script>
 
     <style>
@@ -15,35 +12,31 @@
         margin: 0;
         overflow: hidden;
       }
-      .arjs-loader {
+      #diag {
         position: fixed;
-        top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: black;
-        color: white;
+        top: 0;
+        padding: 10px 12px;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Noto Sans JP", sans-serif;
         z-index: 9999;
+        max-width: 92vw;
+        white-space: pre-wrap;
       }
     </style>
   </head>
 
   <body>
-    <!-- 読み込み中メッセージ（NFTはロードに数秒かかる） -->
-    <div class="arjs-loader">
-      <div>読み込み中です… マーカーを用意してお待ちください</div>
-    </div>
+    <div id="diag">NFT診断: 実行中...</div>
 
     <a-scene
       vr-mode-ui="enabled: false"
       embedded
       renderer="logarithmicDepthBuffer: true;"
-      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;"
     >
-      <!-- Mihamaポスター画像をNFTマーカーとして使う -->
       <a-nft
         type="nft"
         url="./markers/sleeping"
@@ -52,7 +45,6 @@
         smoothTolerance="0.01"
         smoothThreshold="5"
       >
-        <!-- ポスターの上に表示するオブジェクト（仮に箱＋テキスト） -->
         <a-box
           position="0 0 0"
           depth="0.2"
@@ -60,27 +52,38 @@
           width="0.2"
           color="#FFCC00"
         ></a-box>
-
         <a-text
-          value="Mihama Marathon AR"
-          position="0 0.3 0"
+          value="Mihama NFT OK"
+          position="0 0.35 0"
           align="center"
           color="#FFFFFF"
-          width="1.5"
+          width="1.8"
         ></a-text>
       </a-nft>
 
-      <!-- カメラ -->
       <a-entity camera></a-entity>
     </a-scene>
 
     <script>
-      // NFTデータの読み込みが終わると a-scene の 'loaded' イベントが発火するので、
-      // ローディング画面を消す
-      document.querySelector("a-scene").addEventListener("loaded", () => {
-        const loader = document.querySelector(".arjs-loader");
-        if (loader) loader.style.display = "none";
-      });
+      const diag = document.getElementById("diag");
+
+      async function check(url) {
+        try {
+          const res = await fetch(url, { cache: "no-store" });
+          return `${url} -> ${res.status} ${res.ok ? "OK" : "NG"}`;
+        } catch (e) {
+          return `${url} -> FETCH ERROR (${e && e.message ? e.message : e})`;
+        }
+      }
+
+      (async () => {
+        const lines = [];
+        lines.push("NFT診断: markerファイル取得チェック");
+        lines.push(await check("./markers/sleeping.fset"));
+        lines.push(await check("./markers/sleeping.fset3"));
+        lines.push(await check("./markers/sleeping.iset"));
+        diag.textContent = lines.join("\n");
+      })();
     </script>
   </body>
 </html>

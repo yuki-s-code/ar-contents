@@ -31,13 +31,23 @@
       arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
     >
       <a-marker preset="hiro">
-        <a-box
+        <!-- 画像を平面として表示 -->
+        <a-image
+          src="niseko1.jpeg"
           position="0 0.5 0"
-          width="0.5"
-          height="0.5"
-          depth="0.5"
-          color="#F00"
-        ></a-box>
+          rotation="-90 0 0"
+          width="1"
+          height="0.6"
+        ></a-image>
+
+        <!-- タイトルテキスト -->
+        <a-text
+          value="Mihama Marathon AR"
+          position="0 1 0"
+          align="center"
+          color="#FFFFFF"
+          width="3"
+        ></a-text>
       </a-marker>
 
       <!-- カメラ（AR.jsが制御する） -->

@@ -38,6 +38,7 @@
       arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;"
     >
       <a-nft
+        id="nft"
         type="nft"
         url="./markers/sleeping"
         smooth="true"
@@ -46,10 +47,10 @@
         smoothThreshold="5"
       >
         <a-box
-          position="0 0 0"
-          depth="0.2"
-          height="0.2"
-          width="0.2"
+          position="0 0.8 0"
+          width="1"
+          height="1"
+          depth="1"
           color="#FFCC00"
         ></a-box>
         <a-text
@@ -84,6 +85,13 @@
         lines.push(await check("./markers/sleeping.iset"));
         diag.textContent = lines.join("\n");
       })();
+      const nftEl = document.getElementById("nft");
+      nftEl.addEventListener("markerFound", () => {
+        diag.textContent += "\nmarkerFound: 認識しました";
+      });
+      nftEl.addEventListener("markerLost", () => {
+        diag.textContent += "\nmarkerLost: 見失いました";
+      });
     </script>
   </body>
 </html>

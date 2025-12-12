@@ -40,7 +40,7 @@
       <a-nft
         id="nft"
         type="nft"
-        url="./markers/sleeping"
+        url="./markers/air"
         smooth="true"
         smoothCount="10"
         smoothTolerance="0.01"
@@ -80,9 +80,9 @@
       (async () => {
         const lines = [];
         lines.push("NFT診断: markerファイル取得チェック");
-        lines.push(await check("./markers/sleeping.fset"));
-        lines.push(await check("./markers/sleeping.fset3"));
-        lines.push(await check("./markers/sleeping.iset"));
+        lines.push(await check("./markers/air.fset"));
+        lines.push(await check("./markers/air.fset3"));
+        lines.push(await check("./markers/air.iset"));
         diag.textContent = lines.join("\n");
       })();
       const nftEl = document.getElementById("nft");

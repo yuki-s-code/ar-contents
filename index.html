@@ -2,12 +2,12 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <title>Mihama Marathon AR Demo</title>
+    <title>Mihama Marathon AR (NFT)</title>
 
     <!-- A-Frame本体 -->
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 
-    <!-- AR.js（A-Frame版＋NFT対応ビルド） -->
+    <!-- AR.js（NFT対応ビルド） -->
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.3/aframe/build/aframe-ar-nft.js"></script>
 
     <style>
@@ -15,43 +15,72 @@
         margin: 0;
         overflow: hidden;
       }
+      .arjs-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+        color: white;
+        z-index: 9999;
+      }
     </style>
   </head>
 
   <body>
-    <!--
-      vr-mode-ui="enabled: false"  VRボタンを消す
-      embedded                     ページ全体に埋め込む
-      arjs="..."                   AR.jsの設定
-    -->
+    <!-- 読み込み中メッセージ（NFTはロードに数秒かかる） -->
+    <div class="arjs-loader">
+      <div>読み込み中です… マーカーを用意してお待ちください</div>
+    </div>
+
     <a-scene
       vr-mode-ui="enabled: false"
       embedded
       renderer="logarithmicDepthBuffer: true;"
       arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
     >
-      <a-marker preset="hiro">
-        <!-- 画像を平面として表示 -->
-        <a-image
-          src="niseko1.jpeg"
-          position="0 0.5 0"
-          rotation="-90 0 0"
-          width="1"
-          height="0.6"
-        ></a-image>
+      <!-- Mihamaポスター画像をNFTマーカーとして使う -->
+      <a-nft
+        type="nft"
+        url="./markers/mihama"
+        smooth="true"
+        smoothCount="10"
+        smoothTolerance="0.01"
+        smoothThreshold="5"
+      >
+        <!-- ポスターの上に表示するオブジェクト（仮に箱＋テキスト） -->
+        <a-box
+          position="0 0 0"
+          depth="0.2"
+          height="0.2"
+          width="0.2"
+          color="#FFCC00"
+        ></a-box>
 
-        <!-- タイトルテキスト -->
         <a-text
           value="Mihama Marathon AR"
-          position="0 1 0"
+          position="0 0.3 0"
           align="center"
           color="#FFFFFF"
-          width="3"
+          width="1.5"
         ></a-text>
-      </a-marker>
+      </a-nft>
 
-      <!-- カメラ（AR.jsが制御する） -->
+      <!-- カメラ -->
       <a-entity camera></a-entity>
     </a-scene>
+
+    <script>
+      // NFTデータの読み込みが終わると a-scene の 'loaded' イベントが発火するので、
+      // ローディング画面を消す
+      document.querySelector("a-scene").addEventListener("loaded", () => {
+        const loader = document.querySelector(".arjs-loader");
+        if (loader) loader.style.display = "none";
+      });
+    </script>
   </body>
 </html>
